@@ -1,11 +1,71 @@
-use iced::{widget::{button, column, container, row, text, Column}, Element, Length::Fill, Theme};
+use iced::{widget::{button, column, container, image, row, text, Column, Image}, Background, Border, Color, Element, Theme};
 //use rand::{self, seq::SliceRandom};
 
 pub fn main() -> iced::Result{
     iced::application("test", update, view)
-    .theme(|_| Theme::Dracula)
+    .theme(|_| Theme::Dark)
     .run()
 }
+
+struct ButtonStyle;
+struct ContainerStyle;
+
+impl ButtonStyle {
+    fn button_style(_theme: &Theme, _status: button::Status) -> button::Style {
+        button::Style {
+            background: Some(Background::Color(Color::TRANSPARENT)),
+            border: Border {
+                color: Color::WHITE,
+                width: 2.0,
+                radius: 0.0.into(),
+            },
+            ..Default::default()
+        }
+    }
+
+    fn button_image(path:&str) -> Image {
+        image(path).into()
+    }
+}
+
+impl ContainerStyle {
+    fn container_style(_theme: &Theme) -> container::Style {
+        container::Style {
+            background: Some(Background::Color(Color::TRANSPARENT)),
+            border: Border {
+                color: Color::TRANSPARENT,
+                width: 0.0,
+                radius: 5.0.into(),
+            },
+            ..Default::default()
+        }
+    }
+}
+
+// struct ButtonStyle{
+//     border: Border
+// }
+
+// impl ButtonStyle {   
+// }
+
+// struct ButtonStyle;
+
+// impl ButtonStyle {
+//     fn status(&self) -> button::Style {
+//         match button::Status{
+//             button::Status::Active => {
+//                 let a_style = button::Style::default();
+//                 a_style.border.rounded(0);
+//                 a_style
+//             }
+//         }
+//         // button::Style { 
+//         //     background: Some(Background::Color(Color::from_rgb(8.0, 8.0, 8.0))), 
+//         //     ..Default::default()
+//         // }
+//     }
+// }
 
 // struct AnArray{
 //     array: [[u8; 10]; 10],
@@ -41,45 +101,49 @@ pub fn main() -> iced::Result{
 // }
 
 #[derive(Debug, Clone)]
-enum Actions{
+enum Message{
     //Show,
     Label(String),
 }
 
-fn update(value: &mut String, actions: Actions){
-    match actions{
-        //Actions::Show => value.push_str("Show"),
-        Actions::Label(label) => *value = label
+fn update(value: &mut String, message: Message){
+    match message{
+        //Message::Show => value.push_str("Show"),
+        Message::Label(label) => *value = label
     }
 }
 
-fn view(value: &String) -> Element<Actions> {
-    let grid: Column<Actions> = column(
+fn view(value: &String) -> Element<Message> {
+    let grid: Column<Message> = column(
         ('a'..='j').map(|row_index| {
             row(
                 (1..=10).map(|col_index| {
                     let label = format!("{}-{}", row_index, col_index);
-                    button("\u{200b}")
-                        .width(32)
-                        .height(32)
-                        .on_press(Actions::Label(label.clone()))
+                    button(ButtonStyle::button_image("assets/water.png").content_fit(iced::ContentFit::Cover))
+                    .style(ButtonStyle::button_style)
+                        .width(64)
+                        .height(64)
+                        .padding(1)
+                        .on_press(Message::Label(label.clone()))
                         .into()
                 })
             )
-            .spacing(2)
+            .spacing(0)         // Spacing for Rows
             .into()
         })
     )
-    .spacing(2);
+    .spacing(0);            // Spacing for Columns
 
     container(
         column![
             grid,
-            text(value),
+            text(value)
         ]
         .spacing(2)
-        .padding(64),
+        .padding(5),
     )
-    .center(Fill)
+    .style(ContainerStyle::container_style)
+    .center(iced::Length::Fill)
+    .padding(0)
     .into()
 }
