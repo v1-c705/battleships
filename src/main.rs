@@ -1,9 +1,12 @@
-use iced::{widget::{button, column, container, image, row, Column, Image}, Background, Border, Color, Element, Theme};
+use iced::{widget::{button, column, container, image, row, Column, Image}, window::Settings, Background, Border, Color, Element, Size, Theme};
 //use rand::{self, seq::SliceRandom};
 
 pub fn main() -> iced::Result{
     iced::application("test", update, view)
+    .window(Settings{icon: Some(iced::window::icon::from_file("assets/water.png").unwrap()), ..Default::default()})
     .theme(|_| Theme::Dark)
+    .resizable(false)
+    .window_size(Size{width: 1200.0, height: 720.0})
     .run()
 }
 
