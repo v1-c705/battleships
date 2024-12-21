@@ -1,4 +1,4 @@
-use iced::{widget::{button, column, container, image, row, text, Column, Image}, Background, Border, Color, Element, Theme};
+use iced::{widget::{button, column, container, image, row, Column, Image}, Background, Border, Color, Element, Theme};
 //use rand::{self, seq::SliceRandom};
 
 pub fn main() -> iced::Result{
@@ -11,15 +11,28 @@ struct ButtonStyle;
 struct ContainerStyle;
 
 impl ButtonStyle {
-    fn button_style(_theme: &Theme, _status: button::Status) -> button::Style {
-        button::Style {
-            background: Some(Background::Color(Color::TRANSPARENT)),
-            border: Border {
-                color: Color::WHITE,
-                width: 2.0,
-                radius: 0.0.into(),
+    fn button_style(_theme: &Theme, status: button::Status) -> button::Style {
+        match status {
+            button::Status::Active => button::Style {
+                background: Some(Background::Color(Color::WHITE)),
+                border: Border {
+                    color: Color::TRANSPARENT,
+                    width: 0.0,
+                    radius: 0.0.into(),
+                },
+                ..Default::default()
             },
-            ..Default::default()
+            button::Status::Hovered => button::Style {
+                background: Some(Background::Color(Color::from_rgb8(161, 161, 161))),
+                border: Border {
+                    color: Color::TRANSPARENT,
+                    width: 0.0,
+                    radius: 0.0.into(),
+                },
+                ..Default::default()
+            },
+            button::Status::Disabled => button::Style{..Default::default()},
+            button::Status::Pressed => button::Style{..Default::default()},
         }
     }
 
@@ -29,9 +42,20 @@ impl ButtonStyle {
 }
 
 impl ContainerStyle {
-    fn container_style(_theme: &Theme) -> container::Style {
+    fn base_container_style(_theme: &Theme) -> container::Style {
         container::Style {
             background: Some(Background::Color(Color::TRANSPARENT)),
+            border: Border {
+                color: Color::TRANSPARENT,
+                width: 0.0,
+                radius: 0.0.into(),
+            },
+            ..Default::default()
+        }
+    }
+    fn main_container_style(_theme: &Theme) -> container::Style {
+        container::Style {
+            background: Some(Background::Color(Color::WHITE)),
             border: Border {
                 color: Color::TRANSPARENT,
                 width: 0.0,
@@ -42,58 +66,19 @@ impl ContainerStyle {
     }
 }
 
-// struct ButtonStyle{
-//     border: Border
-// }
-
-// impl ButtonStyle {   
-// }
-
-// struct ButtonStyle;
-
-// impl ButtonStyle {
-//     fn status(&self) -> button::Style {
-//         match button::Status{
-//             button::Status::Active => {
-//                 let a_style = button::Style::default();
-//                 a_style.border.rounded(0);
-//                 a_style
-//             }
-//         }
-//         // button::Style { 
-//         //     background: Some(Background::Color(Color::from_rgb(8.0, 8.0, 8.0))), 
-//         //     ..Default::default()
-//         // }
-//     }
-// }
-
-// struct AnArray{
-//     array: [[u8; 10]; 10],
-// }
-
 // fn array_2d() -> String {
 //     let mut seed = rand::thread_rng();
 
 //     let chance : [u8;3]= [0,0,1];
 
 //     let array = [[0 as u8; 10];10];
-//     let mut string_array = String::new();
-//     let mut array0 = AnArray{
-//         array
-//     };
 
 
 //     for (row_iter, row) in array.iter().enumerate(){
 //         for (column_iter, mut collumn) in row.iter().enumerate(){
 //             collumn = chance.choose(&mut seed).unwrap();
 //             print!("{}", collumn);
-//             if column_iter % 10 == 0 {
-//                 string_array.push_str("\n");
-//                 string_array.push_str(collumn.to_string().as_str());
-//             } else {
-//                 string_array.push_str(collumn.to_string().as_str());
-//             }
-//             array0.array[row_iter][column_iter] = *collumn;
+//             array[row_iter][column_iter] = *collumn;
 //         }
 //         println!();
 //     }
@@ -102,18 +87,16 @@ impl ContainerStyle {
 
 #[derive(Debug, Clone)]
 enum Message{
-    //Show,
     Label(String),
 }
 
 fn update(value: &mut String, message: Message){
     match message{
-        //Message::Show => value.push_str("Show"),
         Message::Label(label) => *value = label
     }
 }
 
-fn view(value: &String) -> Element<Message> {
+fn view(_value: &String) -> Element<Message> {
     let grid: Column<Message> = column(
         ('a'..='j').map(|row_index| {
             row(
@@ -123,7 +106,7 @@ fn view(value: &String) -> Element<Message> {
                     .style(ButtonStyle::button_style)
                         .width(64)
                         .height(64)
-                        .padding(1)
+                        .padding(2)
                         .on_press(Message::Label(label.clone()))
                         .into()
                 })
@@ -135,14 +118,18 @@ fn view(value: &String) -> Element<Message> {
     .spacing(0);            // Spacing for Columns
 
     container(
-        column![
-            grid,
-            text(value)
-        ]
-        .spacing(2)
-        .padding(5),
+        container(
+            column![
+                grid
+            ]
+            .spacing(2)
+            .padding(7),
+        )
+        .style(ContainerStyle::main_container_style)
+        .center(iced::Length::Shrink)
+        .padding(0)
     )
-    .style(ContainerStyle::container_style)
+    .style(ContainerStyle::base_container_style)
     .center(iced::Length::Fill)
     .padding(0)
     .into()
