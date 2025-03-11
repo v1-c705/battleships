@@ -14,7 +14,7 @@ pub enum Size{
     FiveTiles = 5
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub enum Orientation{
     HorizontalRight,
     HorizontalLeft,
