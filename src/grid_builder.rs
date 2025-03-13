@@ -14,16 +14,16 @@ pub fn array_2d() -> AnArray{
         array: ref_array,
     };
 
-    fn handle_orientation(mut array: AnArray, row_iter: usize, column_iter: usize, size: Size, orientation: Orientation) {
+    fn handle_orientation(mut array: AnArray, row_iter: usize, column_iter: usize, size: Size, orientation: Orientation) -> bool {
         match orientation {
             Orientation::HorizontalLeft => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
                     //println!("{:?} HorLeft", row_iter);
-                    if row_iter > size as usize {
-                        println!("{:?}", size as usize);
-                        array.array[row_iter - iter as usize][column_iter] = 1;
+                    if row_iter >= size as usize {
+                        array.array[row_iter - iter][column_iter] = 1;
                     }
                 });
+                true
             },
             Orientation::HorizontalRight => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
@@ -33,6 +33,7 @@ pub fn array_2d() -> AnArray{
                         array.array[row_iter + iter][column_iter] = 1;
                     }
                 });
+                true
             },
             Orientation::VerticalDown => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
@@ -42,15 +43,17 @@ pub fn array_2d() -> AnArray{
                         array.array[row_iter][column_iter + iter] = 1;
                     }
                 });
+                true
             },
             Orientation::VerticalUp => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
                     //println!("{:?} VertUP", row_iter);
-                    if column_iter > size as usize {
+                    if column_iter >= size as usize {
                         println!("{:?}", size as usize);
                         array.array[row_iter][column_iter - iter] = 1;
                     }
                 });
+                true
             }
         }
     }
@@ -71,23 +74,39 @@ pub fn array_2d() -> AnArray{
                     match size {
                         Size::TwoTiles => loop{
                             let orientation = *orientation_chance.choose(&mut seed).unwrap();
-                            handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
-                            break
+                            let handled = handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
+                            if handled {
+                                break;
+                            } else {
+                                continue;
+                            }
                         },
                         Size::ThreeTiles => loop{
                             let orientation = *orientation_chance.choose(&mut seed).unwrap();
-                            handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
-                            break
+                            let handled = handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
+                            if handled {
+                                break;
+                            } else {
+                                continue;
+                            }
                         },
                         Size::FourTiles => loop{
                             let orientation = *orientation_chance.choose(&mut seed).unwrap();
-                            handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
-                            break
+                            let handled = handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
+                            if handled {
+                                break;
+                            } else {
+                                continue;
+                            }
                         },
                         Size::FiveTiles => loop{
                             let orientation = *orientation_chance.choose(&mut seed).unwrap();
-                            handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
-                            break
+                            let handled = handle_orientation(array.clone(), row_iter, column_iter, size, orientation);
+                            if handled {
+                                break;
+                            } else {
+                                continue;
+                            }
                         },
                         Size::NoTiles => (),
                     }
