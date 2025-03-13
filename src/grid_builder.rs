@@ -18,32 +18,36 @@ pub fn array_2d() -> AnArray{
         match orientation {
             Orientation::HorizontalLeft => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
-                    println!("{:?} HorLeft", row_iter);
+                    //println!("{:?} HorLeft", row_iter);
                     if row_iter > size as usize {
+                        println!("{:?}", size as usize);
                         array.array[row_iter - iter as usize][column_iter] = 1;
                     }
                 });
             },
             Orientation::HorizontalRight => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
-                    println!("{:?} HorRight", row_iter);
+                    //println!("{:?} HorRight", row_iter);
                     if row_iter + iter < 10 {
+                        println!("{:?}", size as usize);
                         array.array[row_iter + iter][column_iter] = 1;
                     }
                 });
             },
             Orientation::VerticalDown => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
-                    println!("{:?} VertDown", row_iter);
+                    //println!("{:?} VertDown", row_iter);
                     if column_iter + iter < 10 {
+                        println!("{:?}", size as usize);
                         array.array[row_iter][column_iter + iter] = 1;
                     }
                 });
             },
             Orientation::VerticalUp => {
                 (0..(size as usize + 1 as usize)).for_each(|iter| {
-                    println!("{:?} VertUP", row_iter);
+                    //println!("{:?} VertUP", row_iter);
                     if column_iter > size as usize {
+                        println!("{:?}", size as usize);
                         array.array[row_iter][column_iter - iter] = 1;
                     }
                 });

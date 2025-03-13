@@ -96,8 +96,10 @@ impl Application{
             },
             Message::Array(mut array, rowdex, coldex) => {
                 match array.array[coldex-1][rowdex-1] {
-                    0 => array.array[coldex-1][rowdex-1] = 1,
-                    1 => array.array[coldex-1][rowdex-1] = 0,
+                    0 => array.array[coldex-1][rowdex-1] = 2,
+                    1 => array.array[coldex-1][rowdex-1] = 3,
+                    2 => (),
+                    3 => (),
                     _ => ()
                 }
                 let toml_string = toml::to_string(&array).expect("Failed to serialize to TOML");
@@ -162,6 +164,12 @@ impl Application{
                                 button(ButtonStyle::button_image("assets/water.png").content_fit(iced::ContentFit::Cover))
                             },
                             1 => {
+                                button(ButtonStyle::button_image("assets/water.png").content_fit(iced::ContentFit::Cover))
+                            },
+                            2 => {
+                                button(ButtonStyle::button_image("assets/water_old.png").content_fit(iced::ContentFit::Cover))
+                            },
+                            3 => {
                                 button(ButtonStyle::button_image("assets/bomb.jpg").content_fit(iced::ContentFit::Cover))
                             },
                             _ => {
